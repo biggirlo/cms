@@ -1,0 +1,162 @@
+<div id="columnApp" v-show="isShow">
+    <h6>
+    </h6>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN GENERAL PORTLET-->
+            <div class="portlet light portlet-fit bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-map-signs font-blue-sharp"></i>
+                        <span class="caption-subject font-blue-sharp bold uppercase">栏目管理</span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-circle btn-icon-only btn-default btn-red" href="javascript:;" title="新增" @click="add">
+                            <i class="fa fa-plus font-blue-sharp"></i>
+                        </button>
+                        <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;" title="删除" @click="del">
+                            <i class="fa fa-remove font-red-mint"></i>
+                        </a>
+                        <button class="btn btn-circle btn-icon-only btn-default" href="javascript:;" title="编辑" @click="edit">
+                            <i class="fa fa-pencil-square-o font-blue-sharp"></i>
+                        </button>
+                        <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;" title="刷新列表" @click="reload">
+                            <i class="fa fa-refresh font-yellow-lemon"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <table class="table table-striped table-bordered table-hover" id="columnTable">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--js文件-->
+    <input type="hidden" id="pageSrcipt" value="../../officialWebsite/column/js/gw_column.js">
+
+
+    <!--新增，编辑菜单模态窗口start-->
+    <div class="portlet-body">
+        <div class="modal fade bs-modal-lg" id="editColumnModal" role="dialog" aria-hidden="true">
+            {{columnModal.title}}
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">{{columnModal.title}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form" id="columnFrom"  method="post" >
+                            <input type="hidden" id="id" name="id" value="" v-model="columnFrom.id">
+                            <div class="form-body">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">栏目编码</label>
+                                    <div class="col-md-4">
+                                        <div class="input-inline">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-plug font-blue-sharp"></i>
+                                                </span>
+                                                <input type="text" id="code" name="code" class="form-control" placeholder="请输入栏目编码..." v-model="columnFrom.code" maxlength="50">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label class="col-md-2 control-label">栏目名称</label>
+                                    <div class="col-md-4">
+                                        <div class="input-inline">
+                                            <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-archive font-blue-sharp"></i>
+                                            </span>
+                                                <input type="text" id="name" name="name" class="form-control" placeholder="请输入栏目名称..." v-model="columnFrom.name" maxlength="50">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" >
+                                    <label class="col-md-2 control-label">排序</label>
+                                    <div class="col-md-4">
+                                        <div class="input-inline">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-sort font-blue-sharp"></i>
+                                                </span>
+                                                <input type="number" id="sort" name="sort" class="form-control" placeholder="请输入排序..." v-model="columnFrom.sort" max="99999">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<label class="col-md-2 control-label">是否顶部展示</label>
+                                    <div class="col-md-4">
+                                        <div class="md-radio-inline">
+                                            <div class="md-radio">
+                                                <input type="radio" id="isShowInTop1" name="isShowInTop" value="1" class="md-radiobtn" v-model="columnFrom.isShowInTop">
+                                                <label for="isShowInTop1">
+                                                    <span></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>是 </label>
+                                            </div>
+                                            <div class="md-radio">
+                                                <input type="radio" id="isShowInTop2" name="isShowInTop" value="2" class="md-radiobtn" v-model="columnFrom.isShowInTop">
+                                                <label for="isShowInTop2">
+                                                    <span></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span> 否</label>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                </div>
+                                <!--<div class="form-group">
+                                    <label class="col-md-2 control-label">封面图片</label>
+                                    <div class="col-md-4">
+                                        <div class="input-inline">
+                                            <div class="input-group">
+                                                <button v-show="!columnFrom.logo && !logoShow" type="button" class="btn blue  btn-outline"  @click="uploadWindow('#logoFile')"><i class="fa fa-cloud-upload font-blue-sharp"></i>点击上传图片</button>
+                                                <input type="file" style="display: none"  name="logoFile" id="logoFile" @change="logoShowFileChange">
+                                                <input type="hidden"  name="logo" id="logo" v-model="columnFrom.logo">
+                                                <img id="logoSrc" alt="logo" style="width: 100%" v-show="columnFrom.logo || logoShow"  @click="uploadWindow('#logoFile')" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label class="col-md-2 control-label">外部链接</label>
+                                    <div class="col-md-4">
+                                        <div class="input-inline">
+                                            <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-mail-forward font-blue-sharp"></i>
+                                            </span>
+                                                <input type="text" id="url" name="url" class="form-control" placeholder="请输入外部链接..." v-model="columnFrom.url" maxlength="400">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">简介</label>
+                                    <div class="col-md-10">
+                                        <textarea class="form-control" id="present" name="present" v-model="columnFrom.present" placeholder="请输入简介..." maxlength="1024" rows="3">
+                                        </textarea>
+                                    </div>
+                                </div>-->
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">栏目功能描述</label>
+                                    <div class="col-md-10">
+                                        <textarea class="form-control" id="concent" name="concent" v-model="columnFrom.concent" placeholder="请输入栏目功能描述..." maxlength="1024" rows="3">
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn dark btn-outline" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn green demo-loading-btn demo-loading-btn" id="formSave" @click="save" data-loading-text="保存...">保存</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+    <!--新增，编辑菜单模态窗口end-->
+</div>

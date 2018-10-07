@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biggirlo.system.mapper.SysHandleMapper">
+    <resultMap id="BaseResultMap" type="com.biggirlo.system.model.SysHandle">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="menu_id" jdbcType="INTEGER" property="menuId" />
+        <result column="handle_code" jdbcType="VARCHAR" property="handleCode" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="type" jdbcType="CHAR" property="type" />
+        <result column="is_available" jdbcType="TINYINT" property="isAvailable" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="create_by" jdbcType="INTEGER" property="createBy" />
+        <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    <sql id="BaseTable">
+        BS_SYS_HANDLE
+    </sql>
+    <sql id="BS_SYS_ROLE_HANDLE_Table">
+        BS_SYS_ROLE_HANDLE
+    </sql>
+    <sql id="BaseColumns">
+        id,menu_id,handle_code,name,url,type,is_available,create_time,create_by,update_by,update_time
+    </sql>
+    <!--<sql id="GenerationType">-->
+    <!--DB_UUID ( select replace(uuid(),'-','') from dual )-->
+    <!--</sql>-->
+
+    <select id="search" resultMap="BaseResultMap">
+        select <include refid="BaseColumns" />
+        from <include refid="BaseTable" />
+    </select>
+
+    <!--查询所有的操作，以treeNode.class对象返回-->
+    <select id="searchHandleToTreeNode" resultType="com.biggirlo.system.jopo.jstree.TreeNode" >
+        SELECT
+            id,
+			name as text,menu_id as parent,
+			'fa fa-wrench' as icon
+        FROM `BS_SYS_HANDLE`;
+    </select>
+
+    <select id="searchHandleToTreeNodeByRole" resultType="com.biggirlo.system.jopo.jstree.TreeNode" >
+        SELECT
+        bsh.id,
+			bsh.name as text,menu_id as parent,
+			'fa fa-wrench' as icon,
+			 CASE
+	        when ISNULL(bsrh.role_id) then FALSE
+	        ELSE TRUE
+       end as isSelect
+        FROM `BS_SYS_HANDLE` bsh LEFT JOIN  <include refid="BS_SYS_ROLE_HANDLE_Table" /> bsrh on bsh.id = bsrh.handle_id and bsrh.role_id = #{roId}
+    </select>
+
+    <!--根据角色获取所有可执行的操作-->
+    <select id="searchByRoles" resultMap="BaseResultMap" parameterType="com.biggirlo.system.jopo.search.HandleRoleSearch">
+        SELECT <include refid="BaseColumns" />
+        FROM <include refid="BaseTable" />  WHERE  id in(
+		SELECT handle_id from <include refid="BS_SYS_ROLE_HANDLE_Table" />
+		<where>
+            role_id in
+          <foreach collection="roles" item="role" open="(" separator="," close=")">
+              #{role.roleId}
+          </foreach>
+        </where>
+        )
+    </select>
+</mapper>

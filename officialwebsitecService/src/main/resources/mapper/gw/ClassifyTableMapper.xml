@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biggirlo.gw.mapper.ClassifyTableMapper">
+    <resultMap id="BaseResultMap" type="com.biggirlo.gw.model.ClassifyTable">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="covers_img" jdbcType="VARCHAR" property="coversImg" />
+        <result column="logo" jdbcType="VARCHAR" property="logo" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+        <result column="column_id" jdbcType="INTEGER" property="columnId" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="present" jdbcType="VARCHAR" property="present" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="create_by" jdbcType="INTEGER" property="createBy" />
+        <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    <sql id="BaseTable">
+        GW_CLASSIFY_TABLE
+    </sql>
+    <sql id="BaseColumns">
+        id,covers_img,logo,name,sort,parent_id,column_id,content,present,code,create_time,create_by,update_by,update_time
+    </sql>
+    <!--<sql id="GenerationType">-->
+    <!--DB_UUID ( select replace(uuid(),'-','') from dual )-->
+    <!--</sql>-->
+
+    <select id="search" resultMap="BaseResultMap">
+        select <include refid="BaseColumns" />
+        from <include refid="BaseTable" />
+    </select>
+    <select id="searchTreeNodes" resultType="com.biggirlo.system.jopo.jstree.TreeNode">
+        SELECT
+            gct.id,
+			gct.name as text,
+			case
+				WHEN ISNULL(gct.parent_id) or gct.parent_id = 0 THEN -gct.column_id
+			ELSE gct.parent_id
+			END as parent,
+			'fa fa-navicon' as icon,
+			gct.column_id as data
+            FROM GW_CLASSIFY_TABLE gct
+
+        union
+
+        SELECT
+          -gce.id as id,
+			gce.name as text,
+			"0" as parent,
+			'fa fa-map-signs font-blue-sharp' as icon,
+            NULL as data
+          FROM GW_COLUMN_TABLE gce;
+    </select>
+</mapper>

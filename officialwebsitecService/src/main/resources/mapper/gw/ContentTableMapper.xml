@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biggirlo.gw.mapper.ContentTableMapper">
+    <resultMap id="BaseResultMap" type="com.biggirlo.gw.model.ContentTable">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="logo" jdbcType="VARCHAR" property="logo" />
+        <result column="covers_img" jdbcType="VARCHAR" property="coversImg" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="author" jdbcType="VARCHAR" property="author" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="classify_id" jdbcType="INTEGER" property="classifyId" />
+        <result column="is_show" jdbcType="TINYINT" property="isShow" />
+        <result column="less_present" jdbcType="LONGVARCHAR" property="lessPresent" />
+        <result column="full_present" jdbcType="LONGVARCHAR" property="fullPresent" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="create_by" jdbcType="INTEGER" property="createBy" />
+        <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    <sql id="BaseTable">
+        GW_CONTENT_TABLE
+    </sql>
+    <sql id="BaseColumns">
+        id,name,sort,logo,covers_img,title,code,classify_id,is_show,less_present,full_present,content,create_time,create_by,update_by,update_time,author,url
+    </sql>
+    <sql id="BaseColumnsLess">
+        id,name,sort,logo,covers_img,title,code,classify_id,is_show,less_present,content,create_time,create_by,update_by,update_time,author,url
+    </sql>
+    <!--<sql id="GenerationType">-->
+    <!--DB_UUID ( select replace(uuid(),'-','') from dual )-->
+    <!--</sql>-->
+
+    <select id="selectLess" resultMap="BaseResultMap" parameterType="com.biggirlo.gw.model.ContentTable">
+        select <include refid="BaseColumnsLess" />,NULL as full_present
+        from <include refid="BaseTable" />
+        <where>
+            <if test="classifyId != null ">
+                AND  classify_id = #{classifyId}
+            </if>
+            <if test="code != null and code !=''" >
+                AND  code LIKE  concat('%', #{code} ,'%')
+            </if>
+            <if test="name != null and name !=''">
+                AND  name LIKE  concat('%', #{name} ,'%')
+            </if>
+            <if test="isShow != null and isShow != ''">
+                AND is_show = #{isShow}
+            </if>
+        </where>
+        ORDER BY sort
+    </select>
+</mapper>

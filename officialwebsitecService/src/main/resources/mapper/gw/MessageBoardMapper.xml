@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.biggirlo.gw.mapper.MessageBoardMapper">
+    <resultMap id="BaseResultMap" type="com.biggirlo.gw.model.MessageBoard">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="moble" jdbcType="VARCHAR" property="moble" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="context" jdbcType="LONGVARCHAR" property="context" />
+        <result column="company" jdbcType="VARCHAR" property="company" />
+        <result column="emali" jdbcType="VARCHAR" property="emali" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="create_by" jdbcType="INTEGER" property="createBy" />
+        <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+    <sql id="BaseTable">
+        GW_MESSAGE_BOARD
+    </sql>
+    <sql id="BaseColumns">
+      id,moble,name,context,create_time,create_by,emali,update_by,update_time,company
+    </sql>
+    <!--<sql id="GenerationType">-->
+    <!--DB_UUID ( select replace(uuid(),'-','') from dual )-->
+    <!--</sql>-->
+
+    <select id="search" resultMap="BaseResultMap">
+        select <include refid="BaseColumns" />
+        from <include refid="BaseTable" />
+    </select>
+</mapper>

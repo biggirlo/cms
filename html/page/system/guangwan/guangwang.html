@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="App">
+        <!--头部的导航条-->
+        <div v-for="column in columnlist">
+            <a v-show="column.isShowInTop" :href="column.url">{{column.name}}</a>
+        </div>
+    </div>
+
+    <!--首页栏目-->
+    <div>
+        <div>
+            <div v-for="content in columnMap.homePage.classifese[0].contents">
+                <img :src="content.coversImg" />
+            </div>
+        </div>
+    </div>
+<script src="guanwang.js"></script>
+</body>
+</html>

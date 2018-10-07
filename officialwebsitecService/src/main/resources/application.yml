@@ -1,0 +1,109 @@
+spring:
+  # 数据源配置
+  datasource:
+    # 名称
+    name: test
+    # 数据库链接
+    url: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=UTC
+    # 用户名
+    username: root
+    # 密码
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat, wall
+    max-active: 20
+    initial-size: 1
+    max-wait: 60000
+    min-idle: 1
+    time-between-eviction-runs-millis: 60000
+    min-evictable-idle-time-millis: 300000
+    validation-query: select 'x'
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    pool-prepared-statements: true
+    max-open-prepared-statements: 20
+  http:
+    encoding:
+      charset: utf-8
+    multipart:
+      maxFileSize: 100Mb
+      maxRequestSize: 100Mb
+  jackson:
+    #date-format: yyyy-MM-dd HH:mm:ss
+    date-format: yyyy-MM-dd
+    time-zone: GMT+8
+    locale: zh_CN
+  aop:
+    auto: true
+    proxy-target-class: false
+
+  web:
+    security:
+      ignoring: "/, /static/**/*"
+      intercept: "/**/*.html"
+      successUrl: "/page/system/index/index.html"
+      logoutSuccessUrl: "/page/system/login/login.html"
+      tologin: false
+
+mybatis:
+  config:
+    # Mybatis model 路径
+    typeAliasesPackage: tk.mapper.model,com.biggirlo.base.model,com.biggirlo.system.model
+    reasonable: true
+    supportMethodsArguments: true
+    returnPageInfo: check
+    params: count=countSql
+    # Mybatis mapper xml 路径
+    mapperLocations: classpath*:mapper/*/*.xml
+    # Mybatis mapper interface 路径
+    basePackage: com.biggirlo.system.mapper
+    # 通用 mapper 接口
+    mappers: tk.mybatis.mapper.common.Mapper
+    # 主键自增全局配置
+    identity: MYSQL
+    logImpl: STDOUT_LOGGING
+
+server:
+  port: 8082
+  tomcat:
+    uri-encoding: UTF-8
+  context-path: /xiaoshu
+
+shiro:
+  cors:
+    tokenheaderName: authorization
+    clientHostPortName: XForwardedFor
+    accessControlAllowMethods: POST, GET, PUT, DELETE,OPTIONS
+    accessControlAllowHeaders: Authentication,Origin, X-Requested-With, Content-Type,token,Accept,Authorization,XForwardedFor
+    accessControlMaxAge: 3600
+    accessControlAllowOrigin: http://localhost:8080,http://192.168.0.144:8888,http://192.168.0.114:8080
+  url:
+    login: /system/login
+    forbidden: /forbidden
+    logout: /logout
+    unLogin: /unLogin
+    index: /index
+    unauthorized: /403
+
+file:
+  uploadDir: html
+  #目标文件夹路径
+  targetDir: D:\guanwang\nginx-1.13.11\html\static\classify\image\
+  hostPost: http://test.com/static/classify/image
+  htmldir: E:\worksplace\svn\officialwebsitecService\target\official-website\static\
+  htmlHostPost: http://127.0.0.1/test
+
+logging:
+  file: cms
+  level:
+    ROOT: warn
+    org.springframework: info
+    org.springframework.web.servlet.view: info
+    org.springframework.web.servlet.mvc: info
+    io.undertow.request: info
+    com.ruiji: debug
+    com.einwin.framework.mybatis: debug
+    com.github.pagehelper: TRACE
+    com.zaxxer.hikari: TRACE
