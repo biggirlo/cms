@@ -22,7 +22,7 @@ officialwebsitecService：后台管理端<br/>
 系统使用springboot，故可使用内置tomcat插件。
 
 ### 新建数据库
-
+使用 doc/demo.sql 脚本新建mysql数据库
 
 ### 修改配置文件：
 修改 /html/page/common/common.js文件中的context.config.requestHost（请求地址域名与头部） 与 context.config.hostPort （项目域名）<br/>
