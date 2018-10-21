@@ -20,7 +20,9 @@ officialwebsitecService：后台管理端<br/>
 
 ## 如何启动：
 系统使用springboot，故可使用内置tomcat插件。
-### 编译工具启动
+修改 /html/page/common/common.js文件中的context.config.requestHost（请求地址域名与头部） 与 context.config.hostPort （项目域名）<br/>
+修改 /officialwebsitecService/src/main/resources/application.yml spring.datasource的数据库配置，改成实际数据库地址与账户秘密；修改file.targetDir，修改成实际存储文件夹路径，用来存储文件，修改file.hostPost,该配置为上传文件的访问地址 <br/>
+
   
 
 ## 系统截图：
